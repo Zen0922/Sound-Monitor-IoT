@@ -15,5 +15,5 @@ ESP32 (XIAO ESP32S3) based sound level sensor.
 - BLE transmission
 
 ## Image
-![Sensor](docs/esp32s3_sensor_1.jpg)
-![Sensor](docs/esp32s3_sensor_2.jpg)
+![Sensor](/docs/esp32s3_sensor_1.jpg)
+![Sensor](/docs/esp32s3_sensor_2.jpg)
