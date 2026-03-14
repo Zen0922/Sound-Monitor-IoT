@@ -1,26 +1,59 @@
-﻿# Python
+﻿# ----------------------
+# Python
+# ----------------------
+
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+*.pyd
+
+# virtualenv
 venv/
+.env/
 .venv/
 
-# Logs
-*.log
-logs/
+# ----------------------
+# OS files
+# ----------------------
 
-# Environment
-.env
-.env.*
-
-# OS
 .DS_Store
 Thumbs.db
 
+# ----------------------
 # Editor
+# ----------------------
+
 .vscode/
 .idea/
 
-# Database
-*.db
+# ----------------------
+# Logs
+# ----------------------
+
+*.log
+
+# ----------------------
+# Config (secrets)
+# ----------------------
+
+common/config.py
+config.py
+
+# example config is allowed
+!config.example.py
+!common/config.example.py
+
+# ----------------------
+# Runtime data
+# ----------------------
+
 *.sqlite
-*.sql.gz
+*.db
+
+# ----------------------
+# Temporary
+# ----------------------
+
+*.tmp
+*.bak
+*.swp
