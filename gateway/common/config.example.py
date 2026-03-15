@@ -106,5 +106,105 @@ MAINTENANCE = {
     #
     # この日数より古い measured_datetime のデータを削除します
     # Delete rows whose measured_datetime is older than this number of days
-    "data_retention_days": 4,
+    "data_retention_days": 10,
+}
+
+
+# ============================================================
+# ディスプレイ明るさ制御設定
+# Display brightness control settings
+# ============================================================
+
+DISPLAY_BRIGHTNESS = {
+    # 通常時の明るさ（%）
+    # Brightness in active state (%)
+    "active_brightness": 50,
+
+    # 第1段階減光時の明るさ（%）
+    # Brightness in first dim state (%)
+    "dim_brightness_1": 20,
+
+    # 第2段階減光時の明るさ（%）
+    # Brightness in second dim state (%)
+    "dim_brightness_2": 5,
+
+    # 消灯時の明るさ（%）
+    # Brightness in off state (%)
+    "off_brightness": 0,
+
+    # 無活動から第1段階減光までの時間（秒）
+    # Seconds until first dim level after inactivity
+    "dim_after_sec_1": 5 * 60,
+
+    # 無活動から第2段階減光までの時間（秒）
+    # Seconds until second dim level after inactivity
+    "dim_after_sec_2": 15 * 60,
+
+    # 無活動から消灯までの時間（秒）
+    # Seconds until off after inactivity
+    "off_after_sec": 30 * 60,
+
+    # 明るさ判定ループ間隔（秒）
+    # Brightness evaluation loop interval (seconds)
+    "poll_interval_sec": 10,
+
+    # 最新値として扱う鮮度の秒数
+    # Freshness threshold for latest sensor values (seconds)
+    "device_freshness_sec": 30,
+
+    # 現在音量状態のキャッシュ秒数
+    # Cache lifetime for current sound status (seconds)
+    "current_sound_cache_sec": 30,
+
+    # バックライト制御ファイルのパス
+    # Backlight control file path
+    "backlight_path": "/sys/class/backlight/10-0045/brightness",
+
+    # max_brightness が取得できない場合の代替値
+    # Fallback max brightness when max_brightness cannot be read
+    "backlight_max_fallback": 255,
+
+    # 判定対象の value_type
+    # Target value_type for sensor_value query
+    "target_value_type": "level",
+
+    # ログレベル
+    # Logging level
+    "log_level": "INFO",
+
+    # 動的閾値計算で参照する過去時間（時間）
+    # Lookback window for dynamic threshold calculation (hours)
+    "threshold_lookback_hours": 48,
+
+    # 動的閾値計算時に除外しない最小値
+    # Minimum level to keep for threshold calculation
+    "level_floor_for_threshold": 6.0,
+
+    # quiet_level 算出に使うパーセンタイル
+    # Percentile used to calculate quiet_level
+    "quiet_percentile": 35.0,
+
+    # quiet_level に加算するマージン
+    # Margin added to quiet_level
+    "threshold_margin": 4.0,
+
+    # 動的閾値の再計算間隔（秒）
+    # Refresh interval for dynamic threshold (seconds)
+    "threshold_refresh_sec": 10 * 60,
+
+    # サンプル不足時に使う既定閾値
+    # Fallback noise threshold when samples are insufficient
+    "fallback_noise_threshold": 15.0,
+
+    # 動的閾値の最小値
+    # Minimum allowed dynamic threshold
+    "min_noise_threshold": 10.0,
+
+    # 動的閾値の最大値
+    # Maximum allowed dynamic threshold
+    "max_noise_threshold": 25.0,
+
+    # 動的閾値計算に必要な最小サンプル数
+    # Minimum sample count required for threshold calculation
+    "min_threshold_sample_count": 100,
 }
