@@ -30,30 +30,57 @@ Thumbs.db
 # Logs
 # ----------------------
 
+logs/
 *.log
 
 # ----------------------
-# Config (secrets)
-# ----------------------
-
-common/config.py
-config.py
-
-# example config is allowed
-!config.example.py
-!common/config.example.py
-
-# ----------------------
 # Runtime data
+# ----------------------
+
+tmp/
+*.tmp
+*.bak
+*.swp
+
+# ----------------------
+# Database / runtime
 # ----------------------
 
 *.sqlite
 *.db
 
 # ----------------------
-# Temporary
+# Secrets / Config
 # ----------------------
 
-*.tmp
-*.bak
-*.swp
+common/config.py
+config.py
+
+# PHP database config
+web/app/config/database.php
+
+# example config is allowed
+!config.example.py
+!common/config.example.py
+!web/app/config/database.example.php
+
+# ----------------------
+# PHP runtime
+# ----------------------
+
+*.cache
+*.sess
+
+# ----------------------
+# Raspberry Pi runtime
+# ----------------------
+
+*.pid
+
+# ----------------------
+# Archive
+# ----------------------
+
+*.zip
+*.tar
+*.gz
