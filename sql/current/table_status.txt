@@ -1,0 +1,6 @@
+Name	Engine	Version	Row_format	Rows	Avg_row_length	Data_length	Max_data_length	Index_length	Data_free	Auto_increment	Create_time	Update_time	Check_time	Collation	Checksum	Create_options	Comment	Max_index_length	Temporary
+detected_sensor_device	InnoDB	10	Dynamic	0	0	16384	0	16384	0	NULL	2026-03-14 13:24:19	2026-03-16 02:11:17	NULL	utf8mb4_uca1400_ai_ci	NULL			0	N
+sensor_device	InnoDB	10	Dynamic	2	8192	16384	0	0	0	16	2026-03-14 13:24:19	2026-03-16 02:11:17	NULL	utf8mb4_uca1400_ai_ci	NULL			0	N
+sensor_value	InnoDB	10	Dynamic	1616552	72	117620736	0	50462720	7340032	5649168	2026-03-14 13:24:19	2026-03-17 01:52:32	NULL	utf8mb4_uca1400_ai_ci	NULL			0	N
+setting_info	InnoDB	10	Dynamic	14	1170	16384	0	0	0	NULL	2026-03-14 13:24:23	2026-03-16 02:12:23	NULL	utf8mb4_uca1400_ai_ci	NULL			0	N
+view_most_recent_value	NULL	NULL	NULL	NULL	NULL	NULL	NULL	NULL	NULL	NULL	NULL	NULL	NULL	NULL	NULL	NULL	VIEW	NULL	NULL
