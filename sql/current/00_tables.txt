@@ -1,0 +1,6 @@
+Tables_in_sound_monitor
+detected_sensor_device
+sensor_device
+sensor_value
+setting_info
+view_most_recent_value

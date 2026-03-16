@@ -1,0 +1,2 @@
+Table	Non_unique	Key_name	Seq_in_index	Column_name	Collation	Cardinality	Sub_part	Packed	Null	Index_type	Comment	Index_comment	Ignored
+detected_sensor_device	0	uq_detected_sensor_device_addr	1	device_bt_addr	A	0	17	NULL		BTREE			NO

@@ -1,0 +1,4 @@
+table_name	row_count
+sensor_device	2
+sensor_value	1629781
+detected_sensor_device	0

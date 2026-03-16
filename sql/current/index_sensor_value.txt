@@ -1,0 +1,5 @@
+Table	Non_unique	Key_name	Seq_in_index	Column_name	Collation	Cardinality	Sub_part	Packed	Null	Index_type	Comment	Index_comment	Ignored
+sensor_value	0	PRIMARY	1	sensor_value_id	A	1614536	NULL	NULL		BTREE			NO
+sensor_value	1	idx_sv_device_time	1	device_id	A	10	NULL	NULL		BTREE			NO
+sensor_value	1	idx_sv_device_time	2	measured_datetime	A	807268	NULL	NULL		BTREE			NO
+sensor_value	1	idx_sv_device_time	3	sensor_value_id	A	1614536	NULL	NULL		BTREE			NO
