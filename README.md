@@ -1,56 +1,28 @@
 # 🎧 Sound Monitor IoT
 
-![Platform](https://img.shields.io/badge/platform-Raspberry%20Pi-blue)
-![Language](https://img.shields.io/badge/language-Python%20%7C%20PHP-green)
-![License](https://img.shields.io/badge/license-MIT-lightgrey)
-
-Raspberry Pi + BLE センサーを用いて、環境音を収集・可視化する IoT システムです。
-An IoT system that collects and visualizes environmental sound using Raspberry Pi and BLE sensors.
-
-音量に応じてディスプレイの明るさを自動制御し、円形ディスプレイに表示します。
-The display brightness is automatically adjusted based on sound levels and shown on a circular display.
+ESP32センサーとRaspberry Piを使用したIoT音量監視システム
+IoT sound monitoring system using ESP32 sensors and Raspberry Pi
 
 ---
 
-## 🖥️ デモイメージ / Demo
+## 🧠 概要 / Overview
 
-（スクリーンショットを追加予定）
-(Screenshots will be added here)
-
----
-
-## 🧠 特徴 / Features
-
-* 🔊 BLEセンサーによる音量収集
-  Sound level collection via BLE sensors
-
-* 📊 リアルタイム可視化（円形UI）
-  Real-time visualization (circular UI)
-
-* 💡 音量に応じた自動明度制御
-  Automatic brightness control based on sound level
-
-* 🖥 Chromium kiosk による専用表示
-  Dedicated display using Chromium kiosk mode
-
-* 🔄 systemd による自動起動・安定運用
-  Automatic startup and stable operation with systemd
-
-* 🧩 マイクロサービス構成
-  Microservice-based architecture
+複数の音量センサーからデータを収集し、Raspberry Piをゲートウェイとしてデータベースに蓄積、Web UIおよびディスプレイに可視化するシステムです。
+This system collects sound data from distributed sensors, stores it via a Raspberry Pi gateway, and visualizes it on a web dashboard and display.
 
 ---
 
 ## 🏗️ システム構成 / Architecture
 
 ```text
-[ESP32 / BLE Sensors]
+[ESP32 Sound Sensor]
+        ↓ (BLE)
+[Raspberry Pi Gateway]
+        ├─ Data Collection (Python)
+        ├─ MariaDB
+        └─ Web Server (PHP)
         ↓
-[Raspberry Pi (Collector + DB)]
-        ↓
-[PHP Web UI]
-        ↓
-[Chromium Kiosk Display]
+[Web Dashboard / Kiosk Display]
 ```
 
 ---
@@ -59,103 +31,116 @@ The display brightness is automatically adjusted based on sound levels and shown
 
 ```text
 Sound-Monitor-IoT/
-├── pi/
-│   ├── scripts/          # 起動スクリプト / Startup scripts
-│   │   └── start_kiosk.sh
-│   │
-│   ├── systemd/          # systemdサービス定義 / Service definitions
-│   │   ├── kiosk.service
-│   │   ├── sound-monitor.service
-│   │   ├── sound-monitor-detector.service
-│   │   └── display-brightness.service
-│   │
-│   └── README.md
+├── docs/                            # ドキュメント / Documentation
+│   └── （設計資料・画像など）
 │
-├── ble/                  # BLE収集 / BLE collector
-│   └── collector_read.py
+├── firmware/                        # センサーデバイス側
+│   └── esp32s3_sound_sensor/        # ESP32用ファームウェア
+│       └── （BLE送信・音量測定）
 │
-├── server/               # Webアプリ / Web application
-│   └── php/
-│       └── sound-monitor.php
+├── gateway/                         # Raspberry Pi側（中核）
+│   └── （Pythonスクリプト・systemd等）
+│       ├── collector / データ収集
+│       ├── detector / デバイス検出
+│       ├── brightness / 明度制御
+│       └── kiosk / 表示制御
 │
-└── docs/                 # ドキュメント / Documentation
+├── hardware/                        # ハード設計
+│   └── enclosure/
+│       └── sensor/                  # センサーケース（3Dデータ等）
+│
+├── web/                             # Webアプリケーション
+│   └── （PHP UI・設定画面）
+│
+├── .gitignore
+├── LICENSE
+└── README.md
 ```
 
 ---
 
-## ⚙️ systemdサービス一覧 / Services
+## 🧩 各フォルダの役割 / Directory Roles
 
-| Service                        | 説明 (JP)          | Description (EN)              |
-| ------------------------------ | ---------------- | ----------------------------- |
-| kiosk.service                  | Chromium kiosk起動 | Launch Chromium in kiosk mode |
-| sound-monitor.service          | BLEセンサー収集        | Collect BLE sensor data       |
-| sound-monitor-detector.service | センサーデバイス検出       | Detect BLE devices            |
-| display-brightness.service     | 明度制御             | Control display brightness    |
+### firmware/
 
----
+ESP32センサーデバイスのファームウェア
+Firmware for ESP32-based sound sensor devices
 
-## 🚀 セットアップ / Setup
-
-### ① リポジトリ取得 / Clone repository
-
-```bash
-git clone https://github.com/Zen0922/Sound-Monitor-IoT.git
-cd Sound-Monitor-IoT
-```
+* 音量取得（マイク）
+* BLEでデータ送信
 
 ---
 
-### ② 実行権限付与 / Grant execute permission
+### gateway/
 
-```bash
-chmod +x pi/scripts/start_kiosk.sh
-```
+Raspberry Pi側の中核処理
+Core processing on Raspberry Pi
 
----
+主な役割：
 
-### ③ systemdへ配置 / Install services
-
-```bash
-sudo cp pi/systemd/*.service /etc/systemd/system/
-```
-
----
-
-### ④ リロード / Reload systemd
-
-```bash
-sudo systemctl daemon-reload
-```
+* BLEスキャン・データ収集
+* センサーデバイス検出
+* データベース保存
+* 明度制御
+* kiosk表示制御
 
 ---
 
-### ⑤ 有効化 / Enable services
+### web/
 
-```bash
-sudo systemctl enable kiosk.service
-sudo systemctl enable sound-monitor.service
-sudo systemctl enable sound-monitor-detector.service
-sudo systemctl enable display-brightness.service
-```
+可視化および操作UI
+Web-based dashboard and control interface
 
----
+主な役割：
 
-### ⑥ 起動 / Start services
-
-```bash
-sudo systemctl start kiosk.service
-sudo systemctl start sound-monitor.service
-sudo systemctl start sound-monitor-detector.service
-sudo systemctl start display-brightness.service
-```
+* 音量表示
+* センサー管理
+* 閾値設定
 
 ---
 
-## 🔍 ログ確認 / Logs
+### hardware/
 
-```bash
-journalctl -u kiosk.service -f
-```
+ハードウェア設計データ
+Hardware design assets
+
+主な内容：
+
+* センサーケース（3Dプリント用）
+* 設置用パーツ
+
+---
+
+### docs/
+
+ドキュメント・画像
+Documentation and images
+
+主な用途：
+
+* 構成図
+* スクリーンショット
+* 設計資料
+
+---
+
+## ⚙️ システム構成（機能単位） / Functional Components
+
+| 機能     | 内容                   |
+| ------ | -------------------- |
+| センサー   | ESP32 + マイクで音量測定     |
+| 通信     | BLE広告パケット            |
+| ゲートウェイ | Raspberry Pi         |
+| DB     | MariaDB              |
+| 表示     | PHP + Chromium kiosk |
+| 制御     | systemd              |
+
+---
+
+## 🚀 セットアップ（概要） / Setup (Overview)
+
+※詳細は各ディレクトリ内を参照
+See each directory for detailed setup instructions.
 
 ---
 
@@ -163,21 +148,36 @@ journalctl -u kiosk.service -f
 
 * Raspberry Pi OS
 * Python 3
-* MariaDB / MySQL
 * PHP
-* Chromium
+* MariaDB
+* Bluetooth Low Energy (BLE)
+* systemd
 
 ---
 
 ## 📌 今後の予定 / Roadmap
 
-* 自動アップデート機能 / Auto update system
-* MQTT対応 / MQTT support
-* クラウド連携 / Cloud integration
-* UI改善（円形最適化） / UI improvements (circular optimization)
+* MQTT対応
+  MQTT support
+
+* クラウド連携
+  Cloud integration
+
+* UI改善（円形最適化）
+  UI improvements (circular optimization)
+
+* 自動アップデート
+  Auto update system
 
 ---
 
 ## 📄 ライセンス / License
 
 MIT License
+
+---
+
+## 👤 Author
+
+Zen
+GitHub: https://github.com/Zen0922
