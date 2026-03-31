@@ -1,0 +1,19 @@
+[Unit]
+Description=Display Brightness Control (Sound Monitor)
+After=network.target mariadb.service
+Wants=network.target
+
+[Service]
+Type=notify
+User=root
+WorkingDirectory=/home/sound-monitor-pi/Sound-Monitor-Ble
+ExecStart=/home/sound-monitor-pi/Sound-Monitor-Ble/venv/bin/python /home/sound->
+
+Restart=always
+RestartSec=5
+
+WatchdogSec=40
+NotifyAccess=main
+
+StandardOutput=journal
+StandardError=journal
