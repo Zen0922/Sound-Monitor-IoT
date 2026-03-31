@@ -1,183 +1,183 @@
-# Sound Monitor IoT
+# 🎧 Sound Monitor IoT
 
-[![Platform](https://img.shields.io/badge/platform-Raspberry%20Pi-blue)]()
-[![Sensor](https://img.shields.io/badge/sensor-ESP32-green)]()
-[![Database](https://img.shields.io/badge/database-MariaDB-orange)]()
-[![Language](https://img.shields.io/badge/language-Python%20%7C%20PHP-lightgrey)]()
-[![License](https://img.shields.io/badge/license-MIT-blue)]()
+![Platform](https://img.shields.io/badge/platform-Raspberry%20Pi-blue)
+![Language](https://img.shields.io/badge/language-Python%20%7C%20PHP-green)
+![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
-ESP32センサーとRaspberry Piを使用したIoT音量監視システム\
-IoT sound monitoring system using ESP32 sensors and Raspberry Pi
+Raspberry Pi + BLE センサーを用いて、環境音を収集・可視化する IoT システムです。
+An IoT system that collects and visualizes environmental sound using Raspberry Pi and BLE sensors.
 
-------------------------------------------------------------------------
+音量に応じてディスプレイの明るさを自動制御し、円形ディスプレイに表示します。
+The display brightness is automatically adjusted based on sound levels and shown on a circular display.
 
-# Overview / 概要
+---
 
-This project collects sound level data from distributed sensors and
-displays the information on a monitoring dashboard.
+## 🖥️ デモイメージ / Demo
 
-このプロジェクトは、複数の音量センサーからデータを収集し、 Raspberry
-Piをゲートウェイとしてデータベースに保存し、
-Webダッシュボードやモニターに表示するIoTシステムです。
+（スクリーンショットを追加予定）
+(Screenshots will be added here)
 
-The system is designed for continuous environmental sound monitoring.
-環境音量の継続的な監視を目的として設計されています。
+---
 
-------------------------------------------------------------------------
+## 🧠 特徴 / Features
 
-# System Architecture / システム構成
+* 🔊 BLEセンサーによる音量収集
+  Sound level collection via BLE sensors
 
-    +----------------------+
-    | ESP32 Sound Sensor   |
-    | ICS-43434 Microphone |
-    +----------+-----------+
-               |
-               | Bluetooth Low Energy (BLE)
-               |
-    +----------v-----------+
-    | Raspberry Pi Gateway |
-    | Collector Service    |
-    +----------+-----------+
-               |
-               | MariaDB
-               |
-    +----------v-----------+
-    | Web Dashboard        |
-    +----------+-----------+
-               |
-               |
-    +----------v-----------+
-    | Display Monitor      |
-    +----------------------+
+* 📊 リアルタイム可視化（円形UI）
+  Real-time visualization (circular UI)
 
-ESP32センサーがBluetooth Low Energy (BLE)で音量データを送信し、
-Raspberry Piがデータを収集してデータベースへ保存します。
+* 💡 音量に応じた自動明度制御
+  Automatic brightness control based on sound level
 
-ESP32 sensors transmit sound level data via BLE and the Raspberry Pi
-stores the data in the database.
+* 🖥 Chromium kiosk による専用表示
+  Dedicated display using Chromium kiosk mode
 
-------------------------------------------------------------------------
+* 🔄 systemd による自動起動・安定運用
+  Automatic startup and stable operation with systemd
 
-# Features / 主な機能
+* 🧩 マイクロサービス構成
+  Microservice-based architecture
 
-## Sound sensor network / 音量センサーネットワーク
+---
 
-Multiple ESP32-based sensors measure sound levels.\
-ESP32ベースの複数センサーが音量を測定します。
+## 🏗️ システム構成 / Architecture
 
-## BLE data collection / BLEデータ収集
+```text
+[ESP32 / BLE Sensors]
+        ↓
+[Raspberry Pi (Collector + DB)]
+        ↓
+[PHP Web UI]
+        ↓
+[Chromium Kiosk Display]
+```
 
-Raspberry Pi collects sensor data via Bluetooth Low Energy.\
-Raspberry PiがBLEでセンサーデータを収集します。
+---
 
-## Database storage / データベース保存
+## 📁 ディレクトリ構成 / Project Structure
 
-All measurement data is stored in MariaDB.\
-測定データはMariaDBデータベースに保存されます。
+```text
+Sound-Monitor-IoT/
+├── pi/
+│   ├── scripts/          # 起動スクリプト / Startup scripts
+│   │   └── start_kiosk.sh
+│   │
+│   ├── systemd/          # systemdサービス定義 / Service definitions
+│   │   ├── kiosk.service
+│   │   ├── sound-monitor.service
+│   │   ├── sound-monitor-detector.service
+│   │   └── display-brightness.service
+│   │
+│   └── README.md
+│
+├── ble/                  # BLE収集 / BLE collector
+│   └── collector_read.py
+│
+├── server/               # Webアプリ / Web application
+│   └── php/
+│       └── sound-monitor.php
+│
+└── docs/                 # ドキュメント / Documentation
+```
 
-## Web dashboard / Webダッシュボード
+---
 
-Users can monitor sound levels using a web browser.\
-ブラウザから音量状況を確認できます。
+## ⚙️ systemdサービス一覧 / Services
 
-## Display monitor / モニター表示
+| Service                        | 説明 (JP)          | Description (EN)              |
+| ------------------------------ | ---------------- | ----------------------------- |
+| kiosk.service                  | Chromium kiosk起動 | Launch Chromium in kiosk mode |
+| sound-monitor.service          | BLEセンサー収集        | Collect BLE sensor data       |
+| sound-monitor-detector.service | センサーデバイス検出       | Detect BLE devices            |
+| display-brightness.service     | 明度制御             | Control display brightness    |
 
-A dedicated display shows the latest sensor information.\
-専用ディスプレイに最新のセンサー情報を表示します。
+---
 
-## Automatic display brightness / 自動明度制御
+## 🚀 セットアップ / Setup
 
-Display brightness automatically adjusts based on activity.\
-活動状況に応じてディスプレイの明るさを自動制御します。
+### ① リポジトリ取得 / Clone repository
 
-------------------------------------------------------------------------
+```bash
+git clone https://github.com/Zen0922/Sound-Monitor-IoT.git
+cd Sound-Monitor-IoT
+```
 
-# Hardware / 使用ハードウェア
+---
 
-## Sensor Device / センサーデバイス
+### ② 実行権限付与 / Grant execute permission
 
--   Seeed Studio XIAO ESP32S3
--   ICS-43434 MEMS microphone
+```bash
+chmod +x pi/scripts/start_kiosk.sh
+```
 
-## Gateway / ゲートウェイ
+---
 
--   Raspberry Pi 5
--   Raspberry Pi OS
+### ③ systemdへ配置 / Install services
 
-## Display / 表示装置
+```bash
+sudo cp pi/systemd/*.service /etc/systemd/system/
+```
 
--   Circular display module (example: Waveshare)
+---
 
-------------------------------------------------------------------------
+### ④ リロード / Reload systemd
 
-# Software / 使用ソフトウェア
+```bash
+sudo systemctl daemon-reload
+```
 
--   Python
--   PHP
--   MariaDB
--   Bluetooth Low Energy (BLE)
--   systemd
+---
 
-------------------------------------------------------------------------
+### ⑤ 有効化 / Enable services
 
-# Project Structure / ディレクトリ構成
+```bash
+sudo systemctl enable kiosk.service
+sudo systemctl enable sound-monitor.service
+sudo systemctl enable sound-monitor-detector.service
+sudo systemctl enable display-brightness.service
+```
 
-    sound-monitor-iot
-    │
-    ├ src/           application source code / アプリケーションコード
-    ├ config/        configuration files / 設定ファイル
-    ├ systemd/       service definitions / systemd設定
-    ├ sql/           database schema / DB定義
-    ├ scripts/       utility scripts / 運用スクリプト
-    └ docs/          documentation / ドキュメント
+---
 
-------------------------------------------------------------------------
+### ⑥ 起動 / Start services
 
-# Installation / インストール
+```bash
+sudo systemctl start kiosk.service
+sudo systemctl start sound-monitor.service
+sudo systemctl start sound-monitor-detector.service
+sudo systemctl start display-brightness.service
+```
 
-## Clone repository / リポジトリ取得
+---
 
-    git clone https://github.com/Zen0922/Sound-Monitor-IoT.git
+## 🔍 ログ確認 / Logs
 
-## Install dependencies / 依存関係インストール
+```bash
+journalctl -u kiosk.service -f
+```
 
-    pip install -r requirements.txt
+---
 
-## Setup database / データベース構築
+## 🛠 技術スタック / Tech Stack
 
-    mysql < sql/schema.sql
+* Raspberry Pi OS
+* Python 3
+* MariaDB / MySQL
+* PHP
+* Chromium
 
-## Start service / サービス起動
+---
 
-    sudo systemctl enable sound-monitor.service
-    sudo systemctl start sound-monitor.service
+## 📌 今後の予定 / Roadmap
 
-------------------------------------------------------------------------
+* 自動アップデート機能 / Auto update system
+* MQTT対応 / MQTT support
+* クラウド連携 / Cloud integration
+* UI改善（円形最適化） / UI improvements (circular optimization)
 
-# Screenshots / 画面例
+---
 
-Add screenshots in the `docs` directory.\
-`docs` ディレクトリに画面イメージを追加できます。
+## 📄 ライセンス / License
 
-Example:
-
-    docs/dashboard.png
-    docs/sensor-device.jpg
-    docs/system-diagram.png
-
-------------------------------------------------------------------------
-
-# License / ライセンス
-
-This project is licensed under the MIT License.
-
-このプロジェクトはMITライセンスのもとで公開されています。
-
-------------------------------------------------------------------------
-
-# Author / 作者
-
-Zen
-
-GitHub\
-https://github.com/Zen0922
+MIT License
