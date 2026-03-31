@@ -1,0 +1,15 @@
+[Unit]
+Description=Chromium Kiosk
+After=graphical.target
+Wants=graphical.target
+
+[Service]
+User=sound-monitor-pi
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/sound-monitor-pi/.Xauthority
+ExecStart=/home/sound-monitor-pi/start_kiosk.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=graphical.target

@@ -1,0 +1,19 @@
+[Unit]
+Description=Sound Monitor BLE New Sensor Detector
+After=bluetooth.target network.target mariadb.service
+Requires=bluetooth.target
+Wants=network.target mariadb.service
+
+[Service]
+Type=simple
+User=sound-monitor-pi
+Group=sound-monitor-pi
+WorkingDirectory=/home/sound-monitor-pi/Sound-Monitor-Ble
+Environment=PYTHONUNBUFFERED=1
+ExecStartPre=/bin/sleep 7
+ExecStart=/home/sound-monitor-pi/Sound-Monitor-Ble/venv/bin/python /home/sound->
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
